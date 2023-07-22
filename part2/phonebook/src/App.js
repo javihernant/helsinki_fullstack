@@ -110,6 +110,7 @@ const App = () => {
     personsService.getAll()
       .then((persons) => {
         setPersons(persons)
+        console.log(persons)
       })
   }, [])
 
@@ -129,7 +130,7 @@ const App = () => {
       name: newName,
       number: newNumber,
     }
-    var foundPerson = persons.find(p => p.name.toLowerCase().includes(newName))
+    var foundPerson = persons.find(p => p.name.toLowerCase() === newName)
     if (!foundPerson) {
       personsService
         .create(newPerson)
@@ -138,12 +139,16 @@ const App = () => {
           setNotification(`${newName} was added`)
           setTimeout(() => {setNotification(null)}, 5000)
         })
-        .catch(err => console.log("Error at sending person to server", err))
+        .catch(err => {
+          setErrorMessg(err.response.data.error)
+          setTimeout(() => {setErrorMessg(null)}, 5000)
+        })
       
     } else {
       if (foundPerson.number === newNumber) {
         alert(`${newName} is already in phonebook`)
       } else {
+        console.log(foundPerson)
         if (window.confirm(`Modify ${newName}'s number?`)) {
           personsService
           .updatePerson(foundPerson.id, newPerson)
