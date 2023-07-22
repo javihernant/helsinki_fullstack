@@ -157,8 +157,8 @@ const App = () => {
             setNotification(`${newName}'s number was modified`)
             setTimeout(() => {setNotification(null)}, 5000)
           })
-          .catch(() => {
-            setErrorMessg(`${newName}'s data has already been deleted from the server`)
+          .catch(err => {
+            setErrorMessg(err.response.data.error)
             setTimeout(() => {setErrorMessg(null)}, 5000)
           })
         }
